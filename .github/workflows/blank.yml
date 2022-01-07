@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  test-environment-job:
+    name: Do something with required approval on the test environment
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: Test environment something run
+        
+  stage-environment-job:
+    name: Do something with required approval on the stage environment
+    runs-on: ubuntu-latest
+    environment: test
+    needs:
+      - test-environment-job
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: Stage environment something run
