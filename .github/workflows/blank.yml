@@ -9,6 +9,33 @@ on:
   workflow_dispatch:
 
 jobs:
+
+  create-ephemeral-environment:
+    name: Create an ephemeral environment
+    runs-on: ubuntu
+    outputs:
+      environmet-url: ${{ steps.setup.outputs.url }}
+      environmet-name: ${{ steps.setup.outputs.name }}
+    steps:
+      - name: Setup temp environment
+        id: setup
+        shell: bash
+        run: |
+          echo "::set-output name=url::https://example.com"
+          echo "::set-output name=name::Branch: Something"
+
+  temp-environment-job:
+    name: Deploy to new temp
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.create-ephemeral-environment.outpus.name }}
+      url: ${{ needs.create-ephemeral-environment.outputs.tmp }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        shell: bash
+        run: echo "Temp environment something run"
+        
   test-environment-job:
     name: Deploy to test
     runs-on: ubuntu-latest
@@ -22,7 +49,9 @@ jobs:
   stage-environment-job:
     name: Deploy to stage
     runs-on: ubuntu-latest
-    environment: test
+    environment:
+      name: stage
+      url: https://github.com
     needs:
       - test-environment-job
     steps:
@@ -30,3 +59,17 @@ jobs:
       - name: Run a one-line script
         shell: bash
         run: echo "Stage environment something run"
+
+  prod-environment-job:
+    name: Deploy to prod
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: https://github.com
+    needs:
+      - stage-environment-job
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        shell: bash
+        run: echo "Prod environment something run"
