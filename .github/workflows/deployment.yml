@@ -22,14 +22,16 @@ jobs:
         shell: bash
         run: |
           echo "::set-output name=url::https://example.com"
-          echo "::set-output name=name::Branch: Something"
+          echo "::set-output name=name::some-branch-identifier"
 
   temp-environment-job:
     name: Deploy to new temp
     runs-on: ubuntu-latest
+    needs:
+      - create-ephemeral-environment
     environment:
-      name: ${{ needs.create-ephemeral-environment.outpus.name }}
-      url: ${{ needs.create-ephemeral-environment.outputs.tmp }}
+      name: ${{ needs.create-ephemeral-environment.outputs.name }}
+      url: ${{ needs.create-ephemeral-environment.outputs.url }}
     steps:
       - uses: actions/checkout@v2
       - name: Run a one-line script
