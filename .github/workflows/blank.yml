@@ -12,7 +12,7 @@ jobs:
 
   create-ephemeral-environment:
     name: Create an ephemeral environment
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     outputs:
       environmet-url: ${{ steps.setup.outputs.url }}
       environmet-name: ${{ steps.setup.outputs.name }}
