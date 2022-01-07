@@ -9,13 +9,12 @@ on:
   workflow_dispatch:
 
 jobs:
-
   create-ephemeral-environment:
     name: Create an ephemeral environment
     runs-on: ubuntu-latest
     outputs:
-      environmet-url: ${{ steps.setup.outputs.url }}
-      environmet-name: ${{ steps.setup.outputs.name }}
+      url: ${{ steps.setup.outputs.url }}
+      name: ${{ steps.setup.outputs.name }}
     steps:
       - name: Setup temp environment
         id: setup
@@ -30,8 +29,8 @@ jobs:
     needs:
       - create-ephemeral-environment
     environment:
-      name: temp
-      url: https://github.com
+      name: ${{ needs.create-ephemeral-environment.outputs.name }}
+      url: ${{ needs.create-ephemeral-environment.outputs.url }}
     steps:
       - uses: actions/checkout@v2
       - name: Run a one-line script
