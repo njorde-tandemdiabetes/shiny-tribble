@@ -30,8 +30,8 @@ jobs:
     needs:
       - create-ephemeral-environment
     environment:
-      name: ${{ needs.create-ephemeral-environment.outputs.name }}
-      url: ${{ needs.create-ephemeral-environment.outputs.url }}
+      name: temp
+      url: https://github.com
     steps:
       - uses: actions/checkout@v2
       - name: Run a one-line script
