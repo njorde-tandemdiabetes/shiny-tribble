@@ -10,16 +10,17 @@ on:
 
 jobs:
   test-environment-job:
-    name: Do something with required approval on the test environment
+    name: Deploy to test
     runs-on: ubuntu-latest
     environment: test
     steps:
       - uses: actions/checkout@v2
       - name: Run a one-line script
-        run: Test environment something run
+        shell: bash
+        run: echo "Test environment something run"
         
   stage-environment-job:
-    name: Do something with required approval on the stage environment
+    name: Deploy to stage
     runs-on: ubuntu-latest
     environment: test
     needs:
@@ -27,4 +28,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run a one-line script
-        run: Stage environment something run
+        shell: bash
+        run: echo "Stage environment something run"
